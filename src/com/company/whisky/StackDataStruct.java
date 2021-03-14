@@ -180,6 +180,8 @@ public class StackDataStruct {
      * 题目：一个整数数组A,找到每个元素：右边第一个比我小的下标位置，没有则用-1表示
      * 输入：[5,2]
      * 输出：[1,-1]
+     * <p>
+     * 复杂度分析：每个元素只入栈一次，出栈一次，所以时间复杂度是O（N），而空间复杂度为O(N),最差的情况是可能是所有的元素都入栈
      */
     public int[] findRightSmall(int[] A) {
         //结果数组
@@ -205,4 +207,55 @@ public class StackDataStruct {
         }
         return ans;
     }
+
+    /**
+     * 练习题目1：
+     * 给定一个数组，要找到这个数组里每个元素右边比我大的元素的位置
+     * - 注意：是右边第一个比我大的，如果有多个的话
+     * - 如果没有，那么用-1表示
+     * - 返回：一个数组，表示右边比我大的数的下标位置
+     */
+    public int[] findFirstBigSolution(int[] sourceData) {
+        //边界处理
+        if (sourceData == null || sourceData.length == 0) {
+            return new int[0];
+        }
+        //结果数组
+        int[] ans = new int[sourceData.length];
+        //注意栈中的元素记录的是下标
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < sourceData.length; i++) {
+            final int x = sourceData[i];
+            //每个元素都向左遍历栈的元素完成消除动作
+            //这里是递减栈
+            //如果发现进来的元素X与栈中的元素相比
+            //如果大于栈中的元素，那么要把栈中的元素弹出去
+            while (!stack.empty() && sourceData[stack.peek()] < x) {
+                //消除的时候，记录一下谁被消除的了
+                ans[stack.peek()] = i;
+                //消除的时候，值更大的需要从栈中消失
+                stack.pop();
+            }
+            //剩下的入栈
+            stack.push(i);
+        }
+        while (!stack.empty()) {
+            ans[stack.peek()] = -1;
+            stack.pop();
+        }
+        return ans;
+    }
+
+    /**
+     * 练习题2：
+     * 数组中左边比我小的位置的位置
+     */
+    /**
+     * 练习题3：
+     * 数组中左边第一个比我大的元素的位置
+     */
+
+    /**
+     * 如果我们进一步归纳，会发现消除的时候，这里仍然是消除第一个元素，保留一个元素，弹栈的时候，仍然是一直弹栈，直到满足某个条件为止
+     */
 }
