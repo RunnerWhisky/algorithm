@@ -119,6 +119,18 @@ public class StackDataStruct {
      * 完成以下接口来计算还剩下几条鱼？
      * <p>
      * 复杂度分析：每只鱼只出栈一次，入栈一次，所以时间复杂度为 O（N），而空间复杂度为 O(n),因为最差的情况可能所有鱼都入栈
+     * <p>
+     * <p>
+     * 总结：
+     * 一。消除行为不同
+     * 1.对于括号的消除是成对的消除
+     * 2.对于大鱼吃小鱼的配对只会有一个消除
+     * 二。栈中存放的内容不同
+     * 1。括号的例题中存放的是内容本身
+     * 2。大鱼吃小鱼的存放的是索引，可以通过索引查找内容
+     * 三。弹栈的方式 不一样
+     * 1。弹一个元素就可以
+     * 2。用 while 语句一直弹，直到满足某个条件为止
      */
 
     public int fishSolution(int[] fishSize, int[] fishDirection) {
@@ -158,9 +170,39 @@ public class StackDataStruct {
         return stack.size();
     }
 
-//    public int[] findRightSmall(int[] A) {
-//
-//
-//
-//    }
+    /**
+     * 单调栈：是指栈中的元素必须是按升序或是降序排列的栈
+     * 就是说任何时候都需要保证栈的有序性
+     * <p>
+     * <p>
+     * <p>
+     * 找出数组中右边比我小的元素
+     * 题目：一个整数数组A,找到每个元素：右边第一个比我小的下标位置，没有则用-1表示
+     * 输入：[5,2]
+     * 输出：[1,-1]
+     */
+    public int[] findRightSmall(int[] A) {
+        //结果数组
+        int[] ans = new int[A.length];
+        //注意，栈中记录的是下标
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < A.length; i++) {
+            final int x = A[i];
+            //每个元素都向左遍历栈中的元素完成消除动作
+            while (!stack.empty() && A[stack.peek()] > x) {
+                //消除的时候，记录一下被谁消除了
+                ans[stack.peek()] = i;
+                //消除的时候，值更大的需要从栈中消失
+                stack.pop();
+            }
+            //剩余的入栈
+            stack.push(i);
+        }
+        //依旧在栈中的元素，由于没有能消除他们，因此只能将结果设置为-1
+        while (!stack.empty()) {
+            ans[stack.peek()] = -1;
+            stack.pop();
+        }
+        return ans;
+    }
 }
