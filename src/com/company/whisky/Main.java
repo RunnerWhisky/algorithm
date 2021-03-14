@@ -46,6 +46,63 @@ public class Main {
         int[] firstBigSolution = stackDataStruct.findFirstBigSolution(sourceDataA);
         System.out.println("findRightLarge = " + getPrintArray(firstBigSolution));
 
+        Verify.DoubleCheck(new int[]{2, 4, 56, 324, 45, 23});
+        Verify.RandomCheck();
+
+
+    }
+
+    /**
+     * 验证对应查找的结果
+     */
+    public static class Verify {
+        private static int findRightLarge(int[] A, int i) {
+            for (int j = i + 1; j < A.length; j++) {
+                if (A[j] > A[i]) {
+                    return j;
+                }
+            }
+            return -1;
+        }
+
+        private static void check(int[] A, int[] ans) {
+            if (A == null || A.length == 0) {
+                return;
+            }
+            final int N = A.length;
+            for (int i = 0; i < N; i++) {
+                final int r = ans[i];
+                if (r != findRightLarge(A, i)) {
+                    System.out.println("ERROR");
+                }
+            }
+
+        }
+
+        public static void DoubleCheck(int[] A) {
+            StackDataStruct stackDataStruct = new StackDataStruct();
+            int[] ans = stackDataStruct.findFirstBigSolution(A);
+            check(A, ans);
+        }
+
+        public static void RandomCheck() {
+            for (int i = 0; i < 100; i++) {
+                final int len = nextInt() + 1;
+                int[] A = new int[len];
+                for (int j = 0; j < len; j++) {
+                    A[j] = nextInt();
+                }
+                DoubleCheck(A);
+            }
+
+        }
+
+        private static int nextInt() {
+            final double d = Math.random();
+            final int i = (int) (d * 1000);
+            return i;
+        }
+
     }
 
     private static StringBuilder getPrintArray(int[] rightSmall) {

@@ -246,6 +246,7 @@ public class StackDataStruct {
         return ans;
     }
 
+
     /**
      * 练习题2：
      * 数组中左边比我小的位置的位置
