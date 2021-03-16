@@ -250,13 +250,102 @@ public class StackDataStruct {
     /**
      * 练习题2：
      * 数组中左边比我小的位置的位置
+     * <p>
+     * 给定一个数组，要找到这个数组里面每个元素左边比我小的元素的位置
+     * 注意：是左边第一个比我小的，如果有多个的话
+     * 如果没有，那就用-1表示
+     * <p>
+     * 返回：一个数组，表示左边比我小的数的下标位置
+     * <p>
+     * 输入：【5，6】
+     * 输出： 【-1,0】
      */
+
+    public int[] findLeftSmall(int[] A) {
+        if (A == null || A.length == 0) {
+            return new int[0];
+        }
+        int[] ans = new int[A.length];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = A.length - 1; i >= 0; i--) {
+            final int x = A[i];
+            while (!stack.empty() && A[stack.peek()] > x) {
+                ans[stack.peek()] = i;
+                stack.pop();
+            }
+            stack.push(i);
+        }
+        while (!stack.isEmpty()) {
+            ans[stack.peek()] = -1;
+            stack.pop();
+        }
+        return ans;
+
+    }
+
     /**
      * 练习题3：
      * 数组中左边第一个比我大的元素的位置
      */
 
+    public int[] findLeftBig(int[] A) {
+        if (A == null || A.length == 0) {
+            return new int[0];
+        }
+        int[] ans = new int[A.length];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = A.length - 1; i >= 0; i--) {
+            final int x = A[i];
+            while (!stack.empty() && A[stack.peek()] < x) {
+                ans[stack.peek()] = i;
+                stack.pop();
+            }
+            stack.push(i);
+        }
+        while (!stack.empty()) {
+            ans[stack.peek()] = -1;
+        }
+        return ans;
+    }
+
+
     /**
+     *
      * 如果我们进一步归纳，会发现消除的时候，这里仍然是消除第一个元素，保留一个元素，弹栈的时候，仍然是一直弹栈，直到满足某个条件为止
      */
+
+    /**
+     * 【题目】给定一个正整数数组和k，要求依次取出k个数，输出其中数组的子序列，需要满足：
+     * 1。长度为k
+     * 2。字典序最小
+     * 输入： nums = 【3， 5， 2， 6】 k = 2
+     * 输出： 【2， 6】
+     *
+     * 复杂度分析：每个元素只入栈一次，出栈一次，所以时间复杂度为O(N),而空间复杂度为O(N),因为最差的情况也就是把所有的元素入栈
+     *
+     * 小结：
+     *  较小的数消除掉较大的数，使用递增栈
+     *  要注意控制下剩下元素的个数
+     */
+    public int[] findSmallSeq(int[] nums, int k) {
+        int[] ans = new int[k];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < nums.length; i++) {
+            final int x = nums[i];
+            final int left = nums.length - i;
+            while (!stack.empty() && (stack.size() + left) > k && stack.peek() > x) {
+                stack.pop();
+            }
+            stack.push(x);
+        }
+        while (stack.size() > k) {
+            stack.pop();
+        }
+        for (int i = k - 1; i >= 0; i--) {
+            ans[i] = stack.peek();
+            stack.pop();
+        }
+        return ans;
+    }
+
 }
